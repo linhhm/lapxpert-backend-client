@@ -21,6 +21,6 @@ public class ThuongHieu {
 
 //    @OneToMany(mappedBy = "thuongHieu")
 //    @JsonIgnoreProperties("thuongHieu") // 🛠️ TRÁNH đệ quy vô hạn
-//    private List<SanPhamOnline> sanPhamOnlines;
+//    private List<SanPham> sanPhamOnlines;
 }
 

@@ -3,17 +3,19 @@ package com.example.lapxpertbe.Repository;
 
 
 import com.example.lapxpertbe.DTO.SanPhamDTO;
-import com.example.lapxpertbe.Enity.SanPhamOnline;
+import com.example.lapxpertbe.Enity.SanPham;
+import com.example.lapxpertbe.Enity.SanPhamChiTiet;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-public interface SanPhamOnlineRepository extends JpaRepository<SanPhamOnline, Long> {
+@Repository
+public interface SanPhameRepository extends JpaRepository<SanPham, Long> {
 
     @EntityGraph(attributePaths = {"thuongHieu"})
-    List<SanPhamOnline> findByTrangThai(Boolean trangThai);
+    List<SanPham> findByTrangThai(Boolean trangThai);
 
     @Query("""
     SELECT new com.example.lapxpertbe.DTO.SanPhamDTO(
@@ -24,8 +26,8 @@ public interface SanPhamOnlineRepository extends JpaRepository<SanPhamOnline, Lo
         MIN(ct.giaBan),
         MAX(ct.giaBan)
     )
-    FROM SanPhamOnline sp
-    JOIN ChiTietSanPham ct ON ct.sanPham.id = sp.id
+    FROM SanPham sp
+    JOIN SanPhamChiTiet ct ON ct.sanPham.id = sp.id
     JOIN ThuongHieu th ON th.id = sp.thuongHieu.id
     WHERE sp.trangThai = true
     GROUP BY sp.id, sp.tenSanPham, sp.hinhAnh, th.tenThuongHieu

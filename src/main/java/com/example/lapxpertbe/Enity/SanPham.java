@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SanPhamOnline {
+public class SanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -58,7 +58,7 @@ public class SanPhamOnline {
 
     @OneToMany(mappedBy = "sanPham", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"sanPham"}) // để tránh vòng lặp vô hạn khi serialize JSON
-    private List<ChiTietSanPham> chiTietSanPhams;
+    private List<SanPhamChiTiet> chiTietSanPhams;
 
 
 

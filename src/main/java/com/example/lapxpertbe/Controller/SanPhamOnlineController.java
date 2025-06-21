@@ -1,7 +1,7 @@
 package com.example.lapxpertbe.Controller;
 
 import com.example.lapxpertbe.DTO.SanPhamDTO;
-import com.example.lapxpertbe.Enity.SanPhamOnline;
+import com.example.lapxpertbe.Enity.SanPham;
 import com.example.lapxpertbe.Service.SanPhamOnlineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/san-pham-online")
+@CrossOrigin(origins = "*")
+@RequestMapping("api/v1/san-pham-online")
 
 public class SanPhamOnlineController {
 
@@ -24,7 +23,7 @@ public class SanPhamOnlineController {
 
 
     @GetMapping
-    public List<SanPhamOnline> hienThiSanPham() {
+    public List<SanPham> hienThiSanPham() {
         return sanPhamOnlineService.getSanPhamActive();
     }
 
@@ -36,7 +35,7 @@ public class SanPhamOnlineController {
 //        return sanPhamOnlineService.locSanPhamTheoGia(minGia, maxGia);
 //    }
 
-    @GetMapping("/api/san-pham-online/dto") // đổi path
+    @GetMapping("khoang-gia")
     public List<SanPhamDTO> hienThiSanPham1() {
         return sanPhamOnlineService.getSanPhamKhoangGia();
     }
