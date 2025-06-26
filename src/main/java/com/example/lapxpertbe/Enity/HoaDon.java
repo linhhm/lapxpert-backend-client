@@ -1,11 +1,16 @@
 package com.example.lapxpertbe.Enity;
 
+import com.example.lapxpertbe.enums.LoaiHoaDon;
+import com.example.lapxpertbe.enums.TrangThaiDonHang;
+import com.example.lapxpertbe.enums.TrangThaiThanhToan;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +18,7 @@ import java.time.Instant;
 @Table(name = "hoa_don")
 public class HoaDon {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -44,28 +50,37 @@ public class HoaDon {
     @Column(name = "tong_tien_hang", precision = 15, scale = 2)
     private BigDecimal tongTienHang;
 
-    @Column(name = "gia_tri_giam_gia_voucher", nullable = false, precision = 15, scale = 2)
+    @Column(name = "gia_tri_giam_gia_voucher", precision = 15, scale = 2)
     private BigDecimal giaTriGiamGiaVoucher;
 
-    @Column(name = "phi_van_chuyen", nullable = false, precision = 15, scale = 2)
+    @Column(name = "phi_van_chuyen", precision = 15, scale = 2)
     private BigDecimal phiVanChuyen;
 
-    @Column(name = "tong_thanh_toan", nullable = false, precision = 15, scale = 2)
+    @Column(name = "tong_thanh_toan", precision = 15, scale = 2)
     private BigDecimal tongThanhToan;
 
     @Column(name = "trang_thai_don_hang", nullable = false)
-    private String trangThaiDonHang;
+    @Enumerated(EnumType.STRING)
+    private TrangThaiDonHang trangThaiDonHang;
 
     @Column(name = "trang_thai_thanh_toan", nullable = false)
-    private String trangThaiThanhToan;
+    @Enumerated(EnumType.STRING)
+    private TrangThaiThanhToan trangThaiThanhToan;
 
     @Column(name = "loai_hoa_don", nullable = false)
-    private String loaiHoaDon;
+    @Enumerated(EnumType.STRING)
+    private LoaiHoaDon loaiHoaDon;
 
     @Column(name = "ma_van_don", length = 100)
     private String maVanDon;
 
     @Column(name = "ngay_du_kien_giao_hang")
     private Instant ngayDuKienGiaoHang;
-
+    @ManyToMany
+    @JoinTable(
+            name = "hoa_don_phieu_giam_gia",
+            joinColumns = @JoinColumn(name = "hoa_don_id"),
+            inverseJoinColumns = @JoinColumn(name = "phieu_giam_gia_id")
+    )
+    private List<PhieuGiamGia> phieuGiamGias = new ArrayList<>();
 }

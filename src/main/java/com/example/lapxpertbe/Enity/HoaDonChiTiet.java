@@ -15,6 +15,7 @@ import java.time.Instant;
 @Table(name = "hoa_don_chi_tiet")
 public class HoaDonChiTiet {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -30,7 +31,7 @@ public class HoaDonChiTiet {
     @Column(name = "nguoi_cap_nhat", length = 100)
     private String nguoiCapNhat;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST) // Thêm cascade ở đây
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "hoa_don_id", nullable = false)
     private HoaDon hoaDon;

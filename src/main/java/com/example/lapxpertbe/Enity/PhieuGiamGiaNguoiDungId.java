@@ -2,9 +2,7 @@ package com.example.lapxpertbe.Enity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
@@ -14,28 +12,26 @@ import java.util.Objects;
 @Getter
 @Setter
 @Embeddable
-@AllArgsConstructor
-@NoArgsConstructor
-public class HoaDonPhieuGiamGiaId implements Serializable {
-    private static final long serialVersionUID = 5552686616941818651L;
-    @Column(name = "hoa_don_id", nullable = false)
-    private Long hoaDonId;
-
+public class PhieuGiamGiaNguoiDungId implements Serializable {
+    private static final long serialVersionUID = 4657240310889741530L;
     @Column(name = "phieu_giam_gia_id", nullable = false)
     private Long phieuGiamGiaId;
+
+    @Column(name = "nguoi_dung_id", nullable = false)
+    private Long nguoiDungId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        HoaDonPhieuGiamGiaId entity = (HoaDonPhieuGiamGiaId) o;
-        return Objects.equals(this.hoaDonId, entity.hoaDonId) &&
-                Objects.equals(this.phieuGiamGiaId, entity.phieuGiamGiaId);
+        PhieuGiamGiaNguoiDungId entity = (PhieuGiamGiaNguoiDungId) o;
+        return Objects.equals(this.phieuGiamGiaId, entity.phieuGiamGiaId) &&
+                Objects.equals(this.nguoiDungId, entity.nguoiDungId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hoaDonId, phieuGiamGiaId);
+        return Objects.hash(phieuGiamGiaId, nguoiDungId);
     }
 
 }

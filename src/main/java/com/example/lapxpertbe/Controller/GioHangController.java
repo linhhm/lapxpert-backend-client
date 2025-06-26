@@ -1,5 +1,6 @@
 package com.example.lapxpertbe.Controller;
 
+import com.example.lapxpertbe.Enity.GioHang;
 import com.example.lapxpertbe.Service.GioHangService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +12,26 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class GioHangController {
     private final GioHangService gioHangService;
+    @PostMapping("/tao-moi")
+    public ResponseEntity<?> taoGioHangMoi() {
+        try {
+            GioHang newGioHang = gioHangService.taoGioHangMoi();  // Không truyền nguoiDungId nữa
+            return ResponseEntity.ok(newGioHang.getId());  // Trả về ID giỏ hàng vừa tạo
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Lỗi khi tạo giỏ hàng: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/them")
     public ResponseEntity<?> themVaoGio(@RequestParam Long gioHangId,
                                         @RequestParam Long sanPhamChiTietId) {
         try {
+            System.out.println("Received gioHangId: " + gioHangId);  // Log nhận gioHangId
             gioHangService.themVaoGio(sanPhamChiTietId, gioHangId);
             return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng.");
         } catch (RuntimeException e) {
-            e.printStackTrace(); // ✅ thêm dòng này
-            return ResponseEntity.badRequest().body(e.getMessage());
+            e.printStackTrace();  // Log lỗi chi tiết
+            return ResponseEntity.badRequest().body("Lỗi khi thêm sản phẩm vào giỏ hàng: " + e.getMessage());
         }
     }
 
