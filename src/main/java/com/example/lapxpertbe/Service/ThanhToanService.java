@@ -9,6 +9,7 @@ import com.example.lapxpertbe.enums.LoaiHoaDon;
 import com.example.lapxpertbe.enums.TrangThaiDonHang;
 import com.example.lapxpertbe.enums.TrangThaiSerialNumber;
 import com.example.lapxpertbe.enums.TrangThaiThanhToan;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -254,7 +255,8 @@ public class ThanhToanService {
         hoaDon.setNgayCapNhat(Instant.now());
         hoaDon.setNguoiTao("KHACH_VANG_LAI");
         hoaDon.setNguoiCapNhat("KHACH_VANG_LAI");
-        hoaDon.setMaHoaDon(UUID.randomUUID().toString());
+        String maHoaDon = "HD" + Instant.now().toEpochMilli();
+        hoaDon.setMaHoaDon(maHoaDon);
         hoaDon.setLoaiHoaDon(LoaiHoaDon.ONLINE);
         hoaDon.setTrangThaiDonHang(TrangThaiDonHang.CHO_XAC_NHAN);
         hoaDon.setTrangThaiThanhToan(
@@ -329,5 +331,33 @@ public class ThanhToanService {
 
         return hoaDon;
     }
+    @Transactional
+    public void huyDonHang(String maHoaDon) {
+        HoaDon hoaDon = hoaDonRepo.findByMaHoaDon(maHoaDon)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn: " + maHoaDon));
 
+        if (!hoaDon.getTrangThaiDonHang().equals(TrangThaiDonHang.CHO_XAC_NHAN)) {
+            throw new RuntimeException("Chỉ có thể hủy đơn hàng khi đang chờ xác nhận.");
+        }
+
+        // Cập nhật trạng thái hóa đơn
+        hoaDon.setTrangThaiDonHang(TrangThaiDonHang.DA_HUY);
+        hoaDon.setNgayCapNhat(Instant.now());
+        hoaDonRepo.save(hoaDon);
+
+        // Tìm các chi tiết hóa đơn
+        List<HoaDonChiTiet> chiTiets = chiTietRepo.findByHoaDonId(hoaDon.getId());
+
+        for (HoaDonChiTiet ct : chiTiets) {
+            // Tìm các serial liên kết
+            List<SerialNumberHoaDonChiTiet> lienKets = serialNumberHoaDonChiTietRepository
+                    .findByHoaDonChiTietId(ct.getId());
+
+            for (SerialNumberHoaDonChiTiet lk : lienKets) {
+                SerialNumber sn = lk.getSerialNumber();
+                sn.setTrangThai(TrangThaiSerialNumber.AVAILABLE);
+                serialRepo.save(sn);
+            }
+        }
+    }
 }

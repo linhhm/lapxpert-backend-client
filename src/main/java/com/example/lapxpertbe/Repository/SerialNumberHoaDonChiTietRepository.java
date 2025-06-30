@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface SerialNumberHoaDonChiTietRepository extends JpaRepository<SerialNumberHoaDonChiTiet, Long> {
+    List<SerialNumberHoaDonChiTiet> findByHoaDonChiTietId(Long hoaDonChiTietId);
     List<SerialNumberHoaDonChiTiet> findByHoaDonChiTiet_Id(Long hoaDonChiTietId);
 }

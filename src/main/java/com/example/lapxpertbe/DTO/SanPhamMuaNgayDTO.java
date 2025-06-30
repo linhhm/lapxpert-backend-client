@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
-public class MuaNgayDTO {
+public class SanPhamMuaNgayDTO {
     private Long sanPhamChiTietId;
     private int soLuong;
     private BigDecimal giaTaiThoiDiemThem;
-    private ThanhToanOnlineDTO thongTinKhachHang;
-    private String phuongThucThanhToan;
-    private List<SanPhamMuaNgayDTO> danhSachSanPham;
 }

@@ -4,7 +4,9 @@ import com.example.lapxpertbe.enums.LoaiHoaDon;
 import com.example.lapxpertbe.enums.TrangThaiDonHang;
 import com.example.lapxpertbe.enums.TrangThaiThanhToan;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -15,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "hoa_don")
 public class HoaDon {
     @Id
@@ -83,4 +87,7 @@ public class HoaDon {
             inverseJoinColumns = @JoinColumn(name = "phieu_giam_gia_id")
     )
     private List<PhieuGiamGia> phieuGiamGias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<HoaDonChiTiet> hoaDonChiTiets;
 }
