@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,9 @@ public class SanPhamOnlineService {
 
     public List<SanPhamDTO> getSanPhamKhoangGia() {
         return sanPhamOnlineRepository.getSanPhamVaKhoangGia();
+    }
+    public Optional<SanPham> findById(Long id) {
+        return sanPhamOnlineRepository.findById(id);
     }
 
 }

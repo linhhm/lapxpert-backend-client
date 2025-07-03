@@ -22,6 +22,8 @@ public class ChiTietSanPhamDto {
 
     private Long boNhoId;
     private String moTaBoNho;
+    private Long manHinhId;
+    private String moTaManHinh;
 
     private BigDecimal giaBan;
     private BigDecimal giaKhuyenMai;
@@ -56,6 +58,10 @@ public class ChiTietSanPhamDto {
         if (e.getBoNho() != null) {
             dto.setBoNhoId(e.getBoNho().getId());
             dto.setMoTaBoNho(e.getBoNho().getMoTaBoNho());
+        }
+        if (e.getManHinh() != null) {
+            dto.setManHinhId(e.getManHinh().getId());
+            dto.setMoTaManHinh(e.getManHinh().getMoTaManHinh());
         }
 
         dto.setGiaBan(e.getGiaBan());

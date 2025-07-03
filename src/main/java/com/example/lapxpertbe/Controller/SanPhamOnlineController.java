@@ -4,13 +4,12 @@ import com.example.lapxpertbe.DTO.SanPhamDTO;
 import com.example.lapxpertbe.Enity.SanPham;
 import com.example.lapxpertbe.Service.SanPhamOnlineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class SanPhamOnlineController {
     public List<SanPham> hienThiSanPham() {
         return sanPhamOnlineService.getSanPhamActive();
     }
-
 //    @GetMapping("/san-pham/loc")
 //    public List<SanPhamDTO> locSanPham(
 //            @RequestParam Double minGia,
