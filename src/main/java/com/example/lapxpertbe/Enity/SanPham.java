@@ -60,9 +60,17 @@ public class SanPham {
     @JsonIgnoreProperties({"sanPham"}) // để tránh vòng lặp vô hạn khi serialize JSON
     private List<SanPhamChiTiet> chiTietSanPhams;
 
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("sanPham")
+    private List<SanPhamDanhMuc> sanPhamDanhMucs;
 
-
-
+    @Transient
+    public List<DanhMuc> getDanhMucs() {
+        if (this.sanPhamDanhMucs == null) return List.of();
+        return this.sanPhamDanhMucs.stream()
+                .map(SanPhamDanhMuc::getDanhMuc)
+                .toList();
+    }
 
 }
 
