@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "san_pham")
@@ -60,9 +62,23 @@ public class SanPham {
     @JsonIgnoreProperties({"sanPham"}) // để tránh vòng lặp vô hạn khi serialize JSON
     private List<SanPhamChiTiet> chiTietSanPhams;
 
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("sanPham")
+    private List<SanPhamDanhMuc> sanPhamDanhMucs;
 
-
-
-
+    @Transient
+    public List<DanhMuc> getDanhMucs() {
+        if (this.sanPhamDanhMucs == null) return List.of();
+        return this.sanPhamDanhMucs.stream()
+                .map(SanPhamDanhMuc::getDanhMuc)
+                .toList();
+    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "san_pham_danh_muc",
+            joinColumns = @JoinColumn(name = "san_pham_id"),
+            inverseJoinColumns = @JoinColumn(name = "danh_muc_id")
+    )
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Set<DanhMuc> danhMucs = new HashSet<>();
 }
-

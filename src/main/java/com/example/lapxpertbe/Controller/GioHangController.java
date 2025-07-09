@@ -1,6 +1,5 @@
 package com.example.lapxpertbe.Controller;
 
-import com.example.lapxpertbe.Enity.GioHang;
 import com.example.lapxpertbe.Service.GioHangService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,59 +11,67 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class GioHangController {
     private final GioHangService gioHangService;
-    @PostMapping("/tao-moi")
-    public ResponseEntity<?> taoGioHangMoi() {
-        try {
-            GioHang newGioHang = gioHangService.taoGioHangMoi();  // Không truyền nguoiDungId nữa
-            return ResponseEntity.ok(newGioHang.getId());  // Trả về ID giỏ hàng vừa tạo
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Lỗi khi tạo giỏ hàng: " + e.getMessage());
-        }
-    }
 
+    // ➕ Thêm sản phẩm vào giỏ hàng
     @PostMapping("/them")
-    public ResponseEntity<?> themVaoGio(@RequestParam Long gioHangId,
-                                        @RequestParam Long sanPhamChiTietId) {
+    public ResponseEntity<?> themVaoGio(@RequestParam Long sanPhamChiTietId,
+                                        @RequestParam(required = false) String sessionId,
+                                        @RequestParam(required = false) Long nguoiDungId) {
         try {
-            System.out.println("Received gioHangId: " + gioHangId);  // Log nhận gioHangId
-            gioHangService.themVaoGio(sanPhamChiTietId, gioHangId);
+            gioHangService.themVaoGio(sanPhamChiTietId, sessionId, nguoiDungId);
             return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng.");
         } catch (RuntimeException e) {
-            e.printStackTrace();  // Log lỗi chi tiết
-            return ResponseEntity.badRequest().body("Lỗi khi thêm sản phẩm vào giỏ hàng: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Lỗi khi thêm sản phẩm: " + e.getMessage());
         }
     }
 
-    // 📦 Xem giỏ hàng
-    @GetMapping("/{gioHangId}")
-    public ResponseEntity<?> xemGioHang(@PathVariable Long gioHangId) {
-        return ResponseEntity.ok(gioHangService.layDanhSachSanPhamTrongGio(gioHangId));
-    }
-
-    // ♻️ Cập nhật số lượng
-    @PutMapping("/cap-nhat-so-luong")
-    public ResponseEntity<?> capNhatSoLuong(@RequestParam Long gioHangId,
-                                            @RequestParam Long sanPhamChiTietId,
-                                            @RequestParam int soLuongMoi) {
+    // 📦 Xem giỏ hàng hiện tại
+    @GetMapping("/xem")
+    public ResponseEntity<?> xemGioHang(@RequestParam(required = false) String sessionId,
+                                        @RequestParam(required = false) Long nguoiDungId) {
         try {
-            gioHangService.capNhatSoLuong(sanPhamChiTietId, gioHangId, soLuongMoi);
-            return ResponseEntity.ok("Cập nhật số lượng thành công.");
+            return ResponseEntity.ok(gioHangService.layDanhSachSanPhamTrongGio(sessionId, nguoiDungId));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Không thể xem giỏ hàng: " + e.getMessage());
         }
     }
 
-    // ❌ Xóa sản phẩm khỏi giỏ
-    @DeleteMapping("/xoa")
-    public ResponseEntity<?> xoaSanPhamKhoiGio(@RequestParam Long gioHangId,
-                                               @RequestParam Long sanPhamChiTietId) {
-        gioHangService.xoaSanPhamKhoiGio(gioHangId, sanPhamChiTietId);
-        return ResponseEntity.ok("Đã xóa sản phẩm khỏi giỏ hàng.");
+    // ♻️ Cập nhật số lượng sản phẩm
+    @PutMapping("/cap-nhat-so-luong")
+    public ResponseEntity<?> capNhatSoLuong(@RequestParam Long sanPhamChiTietId,
+                                            @RequestParam int soLuongMoi,
+                                            @RequestParam(required = false) String sessionId,
+                                            @RequestParam(required = false) Long nguoiDungId) {
+        try {
+            gioHangService.capNhatSoLuong(sanPhamChiTietId, soLuongMoi, sessionId, nguoiDungId);
+            return ResponseEntity.ok("Đã cập nhật số lượng.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Lỗi khi cập nhật: " + e.getMessage());
+        }
     }
-    @DeleteMapping("/xoa-het")
-    public ResponseEntity<?> xoaHet(@RequestParam Long gioHangId) {
-        gioHangService.xoaToanBoGioHang(gioHangId);
-        return ResponseEntity.ok("Đã xóa toàn bộ giỏ hàng.");
+    // ❌ Xóa một sản phẩm khỏi giỏ
+    @DeleteMapping("/xoa")
+    public ResponseEntity<?> xoaSanPhamKhoiGio(@RequestParam Long sanPhamChiTietId,
+                                               @RequestParam(required = false) String sessionId,
+                                               @RequestParam(required = false) Long nguoiDungId) {
+        try {
+            gioHangService.xoaSanPhamKhoiGio(sanPhamChiTietId, sessionId, nguoiDungId);
+            return ResponseEntity.ok("Đã xóa sản phẩm khỏi giỏ.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Lỗi khi xóa sản phẩm: " + e.getMessage());
+        }
     }
 
+    // ❌ Xóa toàn bộ giỏ hàng
+    @DeleteMapping("/xoa-het")
+    public ResponseEntity<?> xoaHet(@RequestParam(required = false) String sessionId,
+                                    @RequestParam(required = false) Long nguoiDungId) {
+        try {
+            gioHangService.xoaToanBoGioHang(sessionId, nguoiDungId);
+            return ResponseEntity.ok("Đã xóa toàn bộ giỏ hàng.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Lỗi khi xóa toàn bộ giỏ hàng: " + e.getMessage());
+        }
+    }
 }

@@ -29,4 +29,9 @@ public class PhieuGiamGiaController {
         return service.findAll();
     }
 
+    // ✅ API này dùng để load lên trang chủ (công khai, đang còn hạn)
+    @GetMapping("/hien-thi-trang-chu")
+    public ResponseEntity<List<PhieuGiamGia>> getPhieuTrangChu() {
+        return ResponseEntity.ok(service.getPhieuTrangChu());
+    }
 }
