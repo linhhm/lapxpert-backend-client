@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "san_pham")
@@ -64,13 +65,14 @@ public class SanPham {
     @JsonIgnoreProperties("sanPham")
     private List<SanPhamDanhMuc> sanPhamDanhMucs;
 
-    @Transient
-    public List<DanhMuc> getDanhMucs() {
-        if (this.sanPhamDanhMucs == null) return List.of();
-        return this.sanPhamDanhMucs.stream()
-                .map(SanPhamDanhMuc::getDanhMuc)
-                .toList();
-    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "san_pham_danh_muc", // Đảm bảo tên bảng khớp với DB
+            joinColumns = @JoinColumn(name = "san_pham_id"),
+            inverseJoinColumns = @JoinColumn(name = "danh_muc_id")
+    )
+    private Set<DanhMuc> danhMucs;
 
 }
 

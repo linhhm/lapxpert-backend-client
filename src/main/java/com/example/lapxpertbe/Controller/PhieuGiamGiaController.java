@@ -17,7 +17,7 @@ import java.util.List;
 public class PhieuGiamGiaController {
     @Autowired
     private PhieuGiamGiaSerice service;
-//    @GetMapping("/by-code/{ma}")
+    //    @GetMapping("/by-code/{ma}")
 //    public ResponseEntity<?> getVoucherByCode(@PathVariable("ma") String ma) {
 //        return service.findByCodeValid(ma)
 //                .map(voucher -> ResponseEntity.ok(voucher))  // Trả về PhieuGiamGia nếu tìm thấy
@@ -29,4 +29,10 @@ public class PhieuGiamGiaController {
         return service.findAll();
     }
 
+
+    // ✅ API này dùng để load lên trang chủ (công khai, đang còn hạn)
+    @GetMapping("/hien-thi-trang-chu")
+    public ResponseEntity<List<PhieuGiamGia>> getPhieuTrangChu() {
+        return ResponseEntity.ok(service.getPhieuTrangChu());
+    }
 }
