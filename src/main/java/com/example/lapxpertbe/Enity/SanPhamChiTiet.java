@@ -1,5 +1,6 @@
 package com.example.lapxpertbe.Enity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -67,6 +69,9 @@ public class SanPhamChiTiet {
     @JoinColumn(name = "mau_sac_id")
     private MauSac mauSac;
 
+    @OneToMany(mappedBy = "sanPhamChiTiet")
+    @JsonIgnoreProperties({"sanPhamChiTiet", "dotGiamGia"})
+    private List<SanPhamChiTietDotGiamGia> giamGiaTrongDotList;
 }
 
 

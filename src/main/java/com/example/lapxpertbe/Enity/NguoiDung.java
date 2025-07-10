@@ -1,9 +1,7 @@
 package com.example.lapxpertbe.Enity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.example.lapxpertbe.enums.VaiTroNguoiDung;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,7 +57,8 @@ public class NguoiDung {
     private String matKhau;
 
     @Column(name = "vai_tro", nullable = false)
-    private String vaiTro;
+    @Enumerated(EnumType.STRING)
+    private VaiTroNguoiDung vaiTro;
 
     @Column(name = "trang_thai", nullable = false)
     private String trangThai;

@@ -17,4 +17,5 @@ public interface SerialNumberRepository extends JpaRepository<SerialNumber, Long
     @Query(value = "SELECT * FROM serial_number WHERE san_pham_chi_tiet_id = :spctId AND trang_thai = :trangThai LIMIT :limit", nativeQuery = true)
     List<SerialNumber> findTopNBySanPhamChiTietIdAndTrangThai(Long spctId, String trangThai, int limit);
 
+    List<SerialNumber> findBySanPhamChiTietIdAndTrangThai(Long spctId, TrangThaiSerialNumber trangThai);
 }

@@ -30,5 +30,6 @@ public class GioHang {
 
     @Column(name = "nguoi_cap_nhat", length = 100)
     private String nguoiCapNhat;
-
+    @Column(name = "session_id")
+    private String sessionId;
 }

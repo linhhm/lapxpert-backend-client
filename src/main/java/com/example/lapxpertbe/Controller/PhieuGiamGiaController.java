@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/phieu-giam-gia")
+@RequestMapping("api/phieu-giam-gia")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class PhieuGiamGiaController {
@@ -29,4 +29,9 @@ public class PhieuGiamGiaController {
         return service.findAll();
     }
 
+    // ✅ API này dùng để load lên trang chủ (công khai, đang còn hạn)
+    @GetMapping("/hien-thi-trang-chu")
+    public ResponseEntity<List<PhieuGiamGia>> getPhieuTrangChu() {
+        return ResponseEntity.ok(service.getPhieuTrangChu());
+    }
 }

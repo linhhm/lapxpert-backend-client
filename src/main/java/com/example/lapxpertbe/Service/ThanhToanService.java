@@ -81,13 +81,14 @@ public class ThanhToanService {
                     return diaChiRepository.save(dc);
                 });
 
-        // Bước 2: Tạo hóa đơn và lưu trước để lấy ID
+        // Tạo hóa đơn
         HoaDon hoaDon = new HoaDon();
         hoaDon.setNgayTao(Instant.now());
         hoaDon.setNgayCapNhat(Instant.now());
         hoaDon.setNguoiTao("KHACH_VANG_LAI");
         hoaDon.setNguoiCapNhat("KHACH_VANG_LAI");
-        hoaDon.setMaHoaDon(UUID.randomUUID().toString());
+        String maHoaDon = "HD" + Instant.now().toEpochMilli();
+        hoaDon.setMaHoaDon(maHoaDon);
         hoaDon.setLoaiHoaDon(LoaiHoaDon.ONLINE);
         hoaDon.setTrangThaiDonHang(TrangThaiDonHang.CHO_XAC_NHAN);
         hoaDon.setTrangThaiThanhToan(
@@ -99,15 +100,13 @@ public class ThanhToanService {
         hoaDon.setNguoiNhanTen(thongTinKhachHang.getHoTen());
         hoaDon.setNguoiNhanSdt(thongTinKhachHang.getSoDienThoai());
         hoaDon.setDiaChiGiaoHang(diaChi);
-        hoaDon.setPhiVanChuyen(new BigDecimal("30000")); // mặc định
-
-        // Gán tạm giá trị để tránh lỗi null
+        hoaDon.setPhiVanChuyen(new BigDecimal("30000"));
         hoaDon.setTongTienHang(BigDecimal.ZERO);
         hoaDon.setGiaTriGiamGiaVoucher(BigDecimal.ZERO);
         hoaDon.setTongThanhToan(BigDecimal.ZERO);
 
-        // Lưu để lấy ID
         hoaDon = hoaDonRepo.save(hoaDon);
+
 
         // Bước 3: Duyệt giỏ hàng và tạo hóa đơn chi tiết
         List<GioHangChiTiet> chiTiets = gioHangChiTietRepository.findByGioHangId(gioHangId);

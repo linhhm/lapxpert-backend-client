@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/thanh-toan")
+@RequestMapping("api/thanh-toan")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ThanhToanController {
