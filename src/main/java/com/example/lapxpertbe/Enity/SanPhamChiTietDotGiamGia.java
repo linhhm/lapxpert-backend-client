@@ -1,7 +1,7 @@
 package com.example.lapxpertbe.Enity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference; // <-- Thêm cái này
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // Vẫn cần giữ cái này cho SanPhamChiTiet
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,18 +18,15 @@ public class SanPhamChiTietDotGiamGia {
     @EmbeddedId
     private SanPhamChiTietDotGiamGiaId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("dotGiamGiaId")
     @JoinColumn(name = "dot_giam_gia_id")
-    @JsonBackReference // <-- Đổi từ @JsonIgnore sang @JsonBackReference
+    @JsonBackReference
     private DotGiamGia dotGiamGia;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("sanPhamChiTietId")
     @JoinColumn(name = "san_pham_chi_tiet_id")
-    // Giữ nguyên JsonIgnoreProperties cho sanPhamChiTiet,
-    // vì SanPhamChiTiet có thể có mối quan hệ ngược lại với chiTietGiamGiaList,
-    // hoặc bất kỳ List nào khác có thể gây vòng lặp.
-    @JsonIgnoreProperties({"chiTietGiamGiaList", "dotGiamGiaList"}) // Đảm bảo bỏ qua các list có thể gây vòng lặp trong SanPhamChiTiet
+    @JsonIgnoreProperties({"giamGiaTrongDotList", "dotGiamGiaList", "sanPham"})
     private SanPhamChiTiet sanPhamChiTiet;
 }

@@ -34,4 +34,14 @@ public class PhieuGiamGiaController {
     public ResponseEntity<List<PhieuGiamGia>> getPhieuTrangChu() {
         return ResponseEntity.ok(service.getPhieuTrangChu());
     }
+
+    // ⭐ API mới để lấy Top N Voucher ⭐
+    @GetMapping("/top-discount")
+    public ResponseEntity<List<PhieuGiamGia>> getTopDiscountVouchers(@RequestParam(defaultValue = "5") int limit) {
+        List<PhieuGiamGia> topVouchers = service.getTopVouchersByDiscount(limit);
+        if (topVouchers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(topVouchers);
+    }
 }

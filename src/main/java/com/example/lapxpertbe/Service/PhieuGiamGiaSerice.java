@@ -16,24 +16,33 @@ public class PhieuGiamGiaSerice {
     @Autowired
     private PhieuGiamGiaRepository repository;
 
-//    public Optional<PhieuGiamGia> findByCodeValid(String maGiamGia) {
-//        Instant now = Instant.now();
-//        return repository.findByMaGiamGiaAndNgayBatDauBeforeAndNgayKetThucAfter(maGiamGia, now, now);
-//    }
 
     public List<PhieuGiamGia> findAll() {
         return repository.findAll();
     }
+
     public List<PhieuGiamGia> getPhieuTrangChu() {
-        Instant now = Instant.now(); // Lấy thời gian hiện tại (UTC)
-        List<PhieuGiamGia> allPhieu = repository.findAll(); // Lấy tất cả các phiếu từ DB
+        Instant now = Instant.now();
+        List<PhieuGiamGia> allPhieu = repository.findAll();
 
         return allPhieu.stream()
-                .filter(phieu -> !phieu.isPhieuRiengTu()) // Không phải phiếu riêng tư
-                .filter(phieu -> phieu.getNgayBatDau() != null && phieu.getNgayKetThuc() != null) // Đảm bảo ngày không null
-                .filter(phieu -> !phieu.getNgayBatDau().isAfter(now)) // Đã bắt đầu (nghĩa là ngày bắt đầu <= now)
-                .filter(phieu -> phieu.getNgayKetThuc().isAfter(now)) // Chưa kết thúc (nghĩa là ngày kết thúc > now)
-                .filter(phieu -> "DA_DIEN_RA".equals(phieu.getTrangThai())) // Trạng thái đang diễn ra
+                .filter(phieu -> !phieu.isPhieuRiengTu())
+                .filter(phieu -> phieu.getNgayBatDau() != null && phieu.getNgayKetThuc() != null)
+                .filter(phieu -> !phieu.getNgayBatDau().isAfter(now))
+                .filter(phieu -> phieu.getNgayKetThuc().isAfter(now))
+                .filter(phieu -> "DA_DIEN_RA".equals(phieu.getTrangThai()))
                 .collect(Collectors.toList());
+    }
+
+    public List<PhieuGiamGia> getTopVouchersByDiscount(int limit) {
+        Instant currentTime = Instant.now();
+        List<PhieuGiamGia> sortedVouchers = repository.findTopActivePublicVouchersByDiscountValue(currentTime);
+
+        if (sortedVouchers.size() > limit) {
+            return sortedVouchers.stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+        }
+        return sortedVouchers;
     }
 }

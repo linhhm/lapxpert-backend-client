@@ -22,7 +22,7 @@ public class DotGiamGiaController {
     private SanPhamChiTietDotGiamGiaService sanPhamChiTietDotGiamGiaService;
 
     @Autowired
-    private DotGiamGiaService dotGiamGiaRepo;
+    private DotGiamGiaService dotGiamGiaService;
 
     // @GetMapping("/{id}/san-pham")
     // public List<SanPhamChiTietDotGiamGia> getSanPhamTheoDot(@PathVariable("id") Long dotGiamGiaId) {
@@ -45,9 +45,32 @@ public class DotGiamGiaController {
 
     @GetMapping("/all")
     public List<DotGiamGia> getAll() {
-        return dotGiamGiaRepo.findAll();
+        return dotGiamGiaService.findAll();
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DotGiamGia> getDotGiamGiaByIdWithProducts(@PathVariable Long id) {
+        return dotGiamGiaService.findByIdWithDetails(id)
+                .map(dotGiamGia -> {
+                    // Nếu bạn muốn truy cập trực tiếp danh sách SanPhamChiTiet từ DotGiamGia,
+                    // bạn có thể làm như sau:
+                    // dotGiamGia.getChiTietGiamGiaList().forEach(item -> System.out.println(item.getSanPhamChiTiet().getTenSanPham()));
+                    return ResponseEntity.ok(dotGiamGia);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Có thể bỏ comment API này nếu bạn muốn một API riêng biệt chỉ trả về danh sách sản phẩm
+    // nhưng API trên (/{id}) đã có đủ thông tin rồi.
+    @GetMapping("/{id}/san-pham")
+    public ResponseEntity<List<SanPhamChiTietDotGiamGia>> getSanPhamTheoDot(@PathVariable("id") Long dotGiamGiaId) {
+        List<SanPhamChiTietDotGiamGia> products = sanPhamChiTietDotGiamGiaService.getByDotGiamGia(dotGiamGiaId);
+        if (products.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(products);
+    }
 
     // @GetMapping
     // public List<DotGiamGia> getAllDotGiamGia() {

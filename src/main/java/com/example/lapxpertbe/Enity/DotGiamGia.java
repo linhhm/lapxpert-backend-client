@@ -1,5 +1,6 @@
 package com.example.lapxpertbe.Enity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -55,6 +56,6 @@ public class DotGiamGia {
     }
 
     @OneToMany(mappedBy = "dotGiamGia", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Đây là "cha", giữ lại dữ liệu của các "con"
+    @JsonIgnoreProperties("dotGiamGia")
     private List<SanPhamChiTietDotGiamGia> chiTietGiamGiaList;
 }
