@@ -41,9 +41,7 @@ public class SanPhamOnlineController {
 
 
     @GetMapping("/top-selling")
-    // <-- THAY ĐỔI KIỂU TRẢ VỀ CỦA RESPONSEENTITY
     public ResponseEntity<List<SanPhamBanChayDTO>> getTopSellingProducts(@RequestParam(defaultValue = "8") int limit) {
-        // <-- THAY ĐỔI KIỂU DỮ LIỆU BIẾN
         List<SanPhamBanChayDTO> topSellingProducts = sanPhamOnlineService.getTopSellingProducts(limit);
         return ResponseEntity.ok(topSellingProducts);
     }
